@@ -13,6 +13,9 @@ public class Vecino {
     private String nombre;
     private String apellido;
     private String direccion;
+    private String email;
+    private String password;
+
 
     @ManyToOne
     @JoinColumn(name="codigobarrio")
@@ -20,12 +23,32 @@ public class Vecino {
     public Vecino() {
     }
 
-    public Vecino(String documento, String nombre, String apellido, String direccion, Barrio barrio) {
+    public Vecino(String documento, String nombre, String apellido, String direccion, Barrio barrio, String email, String password) {
         this.documento = documento;
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
         this.barrio = barrio;
+        this.password= password;
+        this.email = email;
+
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getDocumento() {

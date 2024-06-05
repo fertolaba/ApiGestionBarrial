@@ -2,7 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Repository.VecinoRepository;
 import com.example.demo.entity.Vecino;
-import com.example.demo.exceptions.VecinoException;
+import com.example.demo.exceptions.SitioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +23,12 @@ public class VecinoService {
         return vecinoRepository.findAll();
     }
 
-    public Vecino buscarPersonaDocumento(String documento) throws VecinoException {
+    public Vecino buscarPersonaDocumento(String documento) throws SitioException {
         Optional<Vecino> optionalVecino = vecinoRepository.findByDocumento(documento);
         if (optionalVecino.isPresent()) {
             return optionalVecino.get();
         } else {
-            throw new VecinoException("No se encontró el vecino con documento: " + documento);
+            throw new SitioException("No se encontró el vecino con documento: " + documento);
         }
     }
 }

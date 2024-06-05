@@ -1,9 +1,9 @@
 package com.example.demo.exceptions;
 
-public class VecinoException extends Exception {
+public class SitioException extends Exception {
     private static final long serialVersionUID = -2835873129858130160L;
 
-    public VecinoException(String mensaje) {
+    public SitioException(String mensaje) {
         super(mensaje);
     }
 }

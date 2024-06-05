@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import com.example.demo.Views.SitioView;
 import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ public class Sitio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idsitio;
+
     private double latitud;
     private double longitud;
     private String calle;

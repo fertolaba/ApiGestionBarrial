@@ -8,5 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface VecinoRepository extends JpaRepository<Vecino, Integer> {
+
     public Optional<Vecino> findByDocumento(String documento);
+    public Optional<Vecino> findByEmail(String email);
+
+
 }

@@ -17,7 +17,7 @@ public class Personal {
     private String password;
     private String sector;
     private int categoria;
-    private Date fechaIngreso;
+    private Date fechaingreso;
 
     @OneToMany(mappedBy = "personal", cascade=CascadeType.ALL)
     private List<Reclamo> reclamos;
@@ -26,7 +26,7 @@ public class Personal {
 
     }
 
-    public Personal(Integer legajo, String nombre, String apellido, String documento, String password, String sector, int categoria, Date fechaIngreso) {
+    public Personal(Integer legajo, String nombre, String apellido, String documento, String password, String sector, int categoria, Date fechaingreso) {
         this.legajo = legajo;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -34,7 +34,7 @@ public class Personal {
         this.password = password;
         this.sector = sector;
         this.categoria = categoria;
-        this.fechaIngreso = fechaIngreso;
+        this.fechaingreso = fechaingreso;
         reclamos = new ArrayList<Reclamo>();
     }
 
@@ -95,10 +95,10 @@ public class Personal {
     }
 
     public Date getFechaIngreso() {
-        return fechaIngreso;
+        return fechaingreso;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
+    public void setFechaIngreso(Date fechaingreso) {
+        this.fechaingreso = fechaingreso;
     }
 }
