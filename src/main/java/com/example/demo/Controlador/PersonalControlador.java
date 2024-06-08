@@ -38,5 +38,4 @@ public class PersonalControlador {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vecino no encontrado");
         }
     }
-
 }
