@@ -1,7 +1,9 @@
 package com.example.demo.Controlador;
 
+import com.example.demo.Repository.PersonalRepository;
 import com.example.demo.Repository.VecinoRepository;
 import com.example.demo.Service.VecinoService;
+import com.example.demo.entity.Personal;
 import com.example.demo.entity.Vecino;
 import com.example.demo.exceptions.SitioException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class VecinoControlador {
     @Autowired
     private VecinoRepository vecinoRepository;
 
+    @Autowired
+    private PersonalRepository personalRepository;
+
     @GetMapping("/listar")
     public List<Vecino> listarVecinos() {
         return vecinoService.getVecinos();
@@ -40,7 +45,7 @@ public class VecinoControlador {
         }
     }
 
-    @PostMapping("/actualizar")
+    @PostMapping("/crearUsuario")
     public ResponseEntity<String> actualizarDatosVecino(@RequestParam String documento,
                                                         @RequestParam String email,
                                                         @RequestParam String password) {
@@ -58,22 +63,40 @@ public class VecinoControlador {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-        Optional<Vecino> vecinoOptional = vecinoRepository.findByEmail(email);
+    public ResponseEntity<String> login(@RequestParam String identifier, @RequestParam String password) {
+        // Intentar autenticar como inspector usando legajo
+        try {
+            int legajo = Integer.parseInt(identifier);
+            Optional<Personal> personalOptional = personalRepository.findByLegajo(legajo);
+            if (personalOptional.isPresent()) {
+                Personal personal = personalOptional.get();
+                if (personal.getPassword().equals(password)) {
+                    // La autenticación es exitosa
+                    return ResponseEntity.ok("Eres un inspector.");
+                } else {
+                    // Contraseña incorrecta
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+                }
+            }
+        } catch (NumberFormatException e) {
+            // No es un legajo, continuar para intentar autenticar como vecino
+        }
 
+        // Intentar autenticar como vecino usando email
+        Optional<Vecino> vecinoOptional = vecinoRepository.findByEmail(identifier);
         if (vecinoOptional.isPresent()) {
             Vecino vecino = vecinoOptional.get();
             if (vecino.getPassword().equals(password)) {
                 // La autenticación es exitosa
-                return ResponseEntity.ok("Bienvenido, eres un vecino.");
+                return ResponseEntity.ok("Eres un vecino.");
             } else {
                 // Contraseña incorrecta
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
             }
-        } else {
-            // Usuario no encontrado
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vecino no encontrado");
         }
+
+        // Usuario no encontrado
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
     }
 
 
