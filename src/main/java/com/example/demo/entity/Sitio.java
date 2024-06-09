@@ -24,10 +24,11 @@ public class Sitio {
     private Date apertura;
     private Date cierre;
     private String comentarios;
+    private String documento;
 
     public Sitio() {}
 
-    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, Date apertura, Date cierre, String comentarios) {
+    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, Date apertura, Date cierre, String comentarios, String documento) {
         this.idsitio = idsitio;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -40,6 +41,7 @@ public class Sitio {
         this.apertura = apertura;
         this.cierre = cierre;
         this.comentarios = comentarios;
+        this.documento = documento;
     }
 
     public Integer getIdSitio() {
@@ -138,9 +140,11 @@ public class Sitio {
         this.comentarios = comentarios;
     }
 
-    public SitioView toView(){
-        return new SitioView(idsitio, latitud, longitud, calle, numero, entrecalleA, entrecalleB, descripcion, acargode, apertura, cierre, comentarios);
+    public String getDocumento() {
+        return documento;
     }
 
-
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
 }
