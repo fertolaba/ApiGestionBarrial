@@ -28,9 +28,7 @@ public class Sitio {
 
     public Sitio() {}
 
-    public Sitio(Integer idsitio, double latitud,
-                 double longitud, String calle, int numero, String entrecalleA, String entrecalleB,
-                 String descripcion, String acargode, Date apertura, Date cierre, String comentarios, String documento) {
+    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, Date apertura, Date cierre, String comentarios, String documento) {
         this.idsitio = idsitio;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -149,10 +147,4 @@ public class Sitio {
     public void setDocumento(String documento) {
         this.documento = documento;
     }
-
-    public SitioView toView(){
-        return new SitioView(idsitio, latitud, longitud, calle, numero, entrecalleA, entrecalleB, descripcion, acargode, apertura, cierre, comentarios, documento);
-    }
-
-
 }
