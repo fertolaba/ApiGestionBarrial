@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name ="movimientosReclamo")
+@Table(name ="movimientosreclamo")
 public class MovimientoReclamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idMovimiento;
+    private Integer idmovimiento;
     @ManyToOne
     @JoinColumn(name = "idreclamo")
     private Reclamo reclamo;
@@ -22,8 +22,8 @@ public class MovimientoReclamo {
 
     }
 
-    public MovimientoReclamo(Integer idMovimiento, Reclamo reclamo, String responsable, String causa, LocalDateTime  fecha) {
-        this.idMovimiento = idMovimiento;
+    public MovimientoReclamo(Integer idmovimiento, Reclamo reclamo, String responsable, String causa, LocalDateTime  fecha) {
+        this.idmovimiento = idmovimiento;
         this.reclamo = reclamo;
         this.responsable = responsable;
         this.causa = causa;
@@ -31,11 +31,11 @@ public class MovimientoReclamo {
     }
 
     public Integer getIdMovimiento() {
-        return idMovimiento;
+        return idmovimiento;
     }
 
     public void setIdMovimiento(Integer idMovimiento) {
-        this.idMovimiento = idMovimiento;
+        this.idmovimiento = idMovimiento;
     }
 
     public Reclamo getReclamo() {

@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import com.example.demo.Views.SitioView;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 import java.util.Date;
 
@@ -21,14 +23,16 @@ public class Sitio {
     private String entrecalleB;
     private String descripcion;
     private String acargode;
-    private Date apertura;
-    private Date cierre;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm",timezone = "America/Argentina/Buenos_Aires")
+    private String apertura;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm",  timezone = "America/Argentina/Buenos_Aires")
+    private String cierre;
     private String comentarios;
     private String documento;
 
     public Sitio() {}
 
-    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, Date apertura, Date cierre, String comentarios, String documento) {
+    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, String apertura, String cierre, String comentarios, String documento) {
         this.idsitio = idsitio;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -116,19 +120,19 @@ public class Sitio {
         this.acargode = cargoDelSitio;
     }
 
-    public Date getApertura() {
+    public String getApertura() {
         return apertura;
     }
 
-    public void setApertura(Date apertura) {
+    public void setApertura(String apertura) {
         this.apertura = apertura;
     }
 
-    public Date getCierre() {
+    public String getCierre() {
         return cierre;
     }
 
-    public void setCierre(Date cierre) {
+    public void setCierre(String cierre) {
         this.cierre = cierre;
     }
 

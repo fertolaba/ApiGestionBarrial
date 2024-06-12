@@ -82,6 +82,7 @@ public class Denuncia {
         this.aceptaresponsabilidad = aceptaResponsabilidad;
     }
 
+
     public DenunciaView toView(){
         return new DenunciaView(iddenuncias, descripcion, estado, aceptaresponsabilidad);
     }

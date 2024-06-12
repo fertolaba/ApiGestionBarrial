@@ -45,59 +45,8 @@ public class VecinoControlador {
         }
     }
 
-    @PostMapping("/crearUsuario")
-    public ResponseEntity<String> actualizarDatosVecino(@RequestParam String documento,
-                                                        @RequestParam String email,
-                                                        @RequestParam String password) {
-        Optional<Vecino> vecinoOptional = vecinoRepository.findByDocumento(documento);
 
-        if (vecinoOptional.isPresent()) {
-            Vecino vecino = vecinoOptional.get();
-            vecino.setEmail(email);
-            vecino.setPassword(password);
-            vecinoRepository.save(vecino); // Actualizar los campos email y password del vecino
-            return ResponseEntity.ok("Datos actualizados correctamente");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vecino no encontrado");
-        }
-    }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String identifier, @RequestParam String password) {
-        // Intentar autenticar como inspector usando legajo
-        try {
-            int legajo = Integer.parseInt(identifier);
-            Optional<Personal> personalOptional = personalRepository.findByLegajo(legajo);
-            if (personalOptional.isPresent()) {
-                Personal personal = personalOptional.get();
-                if (personal.getPassword().equals(password)) {
-                    // La autenticación es exitosa
-                    return ResponseEntity.ok("Eres un inspector.");
-                } else {
-                    // Contraseña incorrecta
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
-                }
-            }
-        } catch (NumberFormatException e) {
-            // No es un legajo, continuar para intentar autenticar como vecino
-        }
-
-        // Intentar autenticar como vecino usando email
-        Optional<Vecino> vecinoOptional = vecinoRepository.findByEmail(identifier);
-        if (vecinoOptional.isPresent()) {
-            Vecino vecino = vecinoOptional.get();
-            if (vecino.getPassword().equals(password)) {
-                // La autenticación es exitosa
-                return ResponseEntity.ok("Eres un vecino.");
-            } else {
-                // Contraseña incorrecta
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
-            }
-        }
-
-        // Usuario no encontrado
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-    }
 
 
 

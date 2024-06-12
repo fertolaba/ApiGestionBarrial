@@ -1,32 +1,30 @@
 package com.example.demo.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name="rubros")
 public class Rubro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idRubro;
+    private Integer idrubro;
     private String descripcion;
 
     public Rubro() {;
     }
 
-    public Rubro(Integer idRubro, String descripcion) {
-        this.idRubro = idRubro;
+    public Rubro(Integer idrubro, String descripcion) {
+        this.idrubro = idrubro;
         this.descripcion = descripcion;
     }
 
     public Integer getIdRubro() {
-        return idRubro;
+        return idrubro;
     }
 
     public void setIdRubro(Integer idRubro) {
-        this.idRubro = idRubro;
+        this.idrubro = idRubro;
     }
 
     public String getDescripcion() {
