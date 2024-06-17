@@ -2,6 +2,7 @@ package com.example.demo.Controlador;
 
 import com.example.demo.DTO.DesperfectoDTO;
 import com.example.demo.DTO.ReclamoDTO;
+import com.example.demo.DTO.SitioDTO;
 import com.example.demo.Repository.*;
 import com.example.demo.Service.DesperfectoService;
 import com.example.demo.Service.ReclamoService;
@@ -41,7 +42,8 @@ public class ReclamoControlador {
                 .orElseThrow(() -> new RuntimeException("Vecino no encontrado"));
         reclamo.setVecino(vecino);
 
-        Sitio sitio = sitioRepository.findById(reclamoDTO.getIdsitio())
+        SitioDTO sitioDTO = reclamoDTO.getSitio();
+        Sitio sitio = sitioRepository.findByNumeroAndCalle(sitioDTO.getNumero(), sitioDTO.getCalle())
                 .orElseThrow(() -> new RuntimeException("Sitio no encontrado"));
         reclamo.setSitio(sitio);
 

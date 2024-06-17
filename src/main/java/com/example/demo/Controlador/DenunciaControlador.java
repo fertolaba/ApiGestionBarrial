@@ -1,6 +1,7 @@
 package com.example.demo.Controlador;
 
 import com.example.demo.DTO.DenunciaDTO;
+import com.example.demo.DTO.SitioDTO;
 import com.example.demo.Repository.DenunciaRepository;
 import com.example.demo.Repository.SitioRepository;
 import com.example.demo.Repository.VecinoRepository;
@@ -26,17 +27,16 @@ public class DenunciaControlador {
     @Autowired
     private SitioRepository sitioRepository;
 
-    @PostMapping("/crear") //nose xq me toma aceptarepsonsabilidad como 0
+    @PostMapping("/crear") //nose xq me toma aceptarepsonsabilidad como 0 cuando creas una denuncia
     public void crearDenuncia(@RequestBody DenunciaDTO denunciaDTO){
         Denuncia denuncias = new Denuncia();
         Vecino vecino = vecinoRepository.findByDocumento(denunciaDTO.getDocumento())
                 .orElseThrow(() -> new RuntimeException("Vecino no encontrado"));
         denuncias.setVecino(vecino);
 
-        denuncias.setDescripcion(denunciaDTO.getDescripcion());
-        Sitio sitio = sitioRepository.findById(denunciaDTO.getIdsitio())
+        SitioDTO sitioDTO = denunciaDTO.getSitio();
+        Sitio sitio = sitioRepository.findByNumeroAndCalle(sitioDTO.getNumero(), sitioDTO.getCalle())
                 .orElseThrow(() -> new RuntimeException("Sitio no encontrado"));
-        denuncias.setSitio(sitio);
         denuncias.setSitio(sitio);
 
         denuncias.setDescripcion(denunciaDTO.getDescripcion());

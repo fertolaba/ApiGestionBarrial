@@ -2,7 +2,7 @@ package com.example.demo.DTO;
 
 public class DenunciaDTO {
     String documento;
-    int idsitio;
+    private SitioDTO sitio;
     String descripcion;
     private int aceptaresponsabilidad;
 
@@ -14,12 +14,12 @@ public class DenunciaDTO {
         this.documento = documento;
     }
 
-    public int getIdsitio() {
-        return idsitio;
+    public SitioDTO getSitio() {
+        return sitio;
     }
 
-    public void setIdsitio(int idsitio) {
-        this.idsitio = idsitio;
+    public void setSitio(SitioDTO sitio) {
+        this.sitio = sitio;
     }
 
     public String getDescripcion() {

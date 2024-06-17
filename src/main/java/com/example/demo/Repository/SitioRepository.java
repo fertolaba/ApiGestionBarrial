@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface SitioRepository extends JpaRepository<Sitio, Integer> {
     Optional<Sitio> findOneByDocumento(String documento);
+    Optional<Sitio> findByNumeroAndCalle(int numero, String calle);
 }
