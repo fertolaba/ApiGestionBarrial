@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReclamoService {
@@ -23,5 +24,9 @@ public class ReclamoService {
 
     public List<Reclamo> getReclamos(){
         return reclamoRepository.findAll();
+    }
+
+    public List<Reclamo> buscarReclamoPorDoc(String documento) {
+        return reclamoRepository.findByVecinoDocumento(documento);
     }
 }

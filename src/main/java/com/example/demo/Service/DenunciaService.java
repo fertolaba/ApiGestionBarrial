@@ -24,4 +24,8 @@ public class DenunciaService {
     public List<Denuncia> getDenuncias(){
         return denunciaRepository.findAll();
     }
+
+    public List<Denuncia> buscarDenunciaPorDoc(String documento) {
+        return denunciaRepository.findByVecinoDocumento(documento);
+    }
 }

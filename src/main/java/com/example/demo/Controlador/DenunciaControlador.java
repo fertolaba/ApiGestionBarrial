@@ -7,6 +7,7 @@ import com.example.demo.Repository.SitioRepository;
 import com.example.demo.Repository.VecinoRepository;
 import com.example.demo.Service.DenunciaService;
 import com.example.demo.entity.Denuncia;
+import com.example.demo.entity.Reclamo;
 import com.example.demo.entity.Sitio;
 import com.example.demo.entity.Vecino;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,10 @@ public class DenunciaControlador {
         return denunciaService.getDenuncias();
     }
 
-
+    @GetMapping("/buscar/{documento}")
+    public List<Denuncia> buscarDenunciaPorDocumento(@PathVariable String documento) {
+        return denunciaService.buscarDenunciaPorDoc(documento);
+    }
 
 
 }
