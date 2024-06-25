@@ -1,15 +1,15 @@
 package com.example.demo.entity;
 
 public class LoginRequest {
-    private String identificador;
+    private String documento;
     private String password;
 
-    public String getIdentificador() {
-        return identificador;
+    public String getDocumento() {
+        return documento;
     }
 
     public void setDocumento(String identificador) {
-        this.identificador = identificador;
+        this.documento = identificador;
     }
 
     public String getPassword() {

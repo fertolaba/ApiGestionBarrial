@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @Column(length = 40)
-    private String identificador;
+    private String documento;
     //private String password;
     private String tipoUsuario;
     private String nombre;
@@ -15,20 +15,20 @@ public class User {
     public User() {
     }
 
-    public User(String identificador /*, String password*/, String tipoUsuario, String nombre, String apellido) {
-        this.identificador = identificador;
+    public User(String documento /*, String password*/, String tipoUsuario, String nombre, String apellido) {
+        this.documento = documento;
         //this.password = password;
         this.tipoUsuario = tipoUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
     }
 
-    public String getIdentificador() {
-        return identificador;
+    public String getDocumento() {
+        return documento;
     }
 
-    public void setIdentificador(String identificador) {
-        this.identificador = identificador;
+    public void setDocumento(String documento) {
+        this.documento = documento;
     }
 
     //public String getPassword() {  return password; }

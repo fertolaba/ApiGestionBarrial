@@ -13,13 +13,8 @@ public class AuthControlador {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/crearsp")
-    public void crearSp() {
-        authService.createProcedureGetUserInfo();
-    }
-
     @PostMapping("/login")
     public User login(@RequestBody LoginRequest loginRequest) {
-        return authService.getUserInfo(loginRequest.getIdentificador(), loginRequest.getPassword());
+        return authService.getUserInfo(loginRequest.getDocumento(), loginRequest.getPassword());
     }
 }

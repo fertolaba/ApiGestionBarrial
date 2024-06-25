@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     @Procedure(procedureName = "GetUserInfo")
-    User getUserInfo(String identificador, String password);
+    User getUserInfo(String documento, String password);
 }
