@@ -18,7 +18,7 @@ public class SitioControlador {
     @Autowired
     private SitioRepository sitioRepository;
 
-    @GetMapping("/listar")
+    @GetMapping()
     public List<Sitio> listarSitios() {
         return sitioService.getSitios();
     }
@@ -28,12 +28,13 @@ public class SitioControlador {
         return sitioService.getSitioByDocumento(documento);
     }
 
-    @PostMapping("/crear")
+    @PostMapping()
     public void crearSitio(@RequestBody Sitio sitio){
         sitioService.guardarSitio(sitio);
     }
 
-    @PutMapping("/editar")
+
+    @PutMapping()
     public void editarSitio(@RequestBody Sitio sitio){
         sitioService.editarSitio(sitio);
     }
