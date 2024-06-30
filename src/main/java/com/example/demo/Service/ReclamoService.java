@@ -19,14 +19,24 @@ public class ReclamoService {
     }
 
     public void crearReclamo(Reclamo reclamo) {
+
+
         reclamoRepository.save(reclamo);
     }
 
-    public List<Reclamo> getReclamos(){
+    public Optional<Reclamo> getReclamoById(Integer idReclamo) {
+        return reclamoRepository.findById(idReclamo);
+    }
+
+    public List<Reclamo> getReclamosByEstado(String estado) {
+        return reclamoRepository.findByEstado(estado);
+    }
+
+    public List<Reclamo> getReclamos() {
         return reclamoRepository.findAll();
     }
 
-    public List<Reclamo> buscarReclamoPorDoc(String documento) {
-        return reclamoRepository.findByVecinoDocumento(documento);
+    public List<Reclamo> getReclamosByDocumento(String documento) {
+        return reclamoRepository.findByDocumento(documento);
     }
 }

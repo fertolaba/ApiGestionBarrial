@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
-    List<Denuncia> findByVecinoDocumento(String documento);
+    List<Denuncia> findByDocumento(String documento);
 }

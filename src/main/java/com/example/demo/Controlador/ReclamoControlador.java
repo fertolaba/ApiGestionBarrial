@@ -34,8 +34,9 @@ public class ReclamoControlador {
     @Autowired
     private PersonalRepository personalRepository;
 
-    @PostMapping("/crear") //crea un reclamo ingresando el legajo y documento, tambien te pide un desperfecto q seria del vecino , si es un inspector te pide un rubro
-    public void crearReclamo(@RequestBody ReclamoDTO reclamoDTO){
+    @PostMapping("/crear") // crea un reclamo ingresando el legajo y documento, tambien te pide un
+                           // desperfecto q seria del vecino , si es un inspector te pide un rubro
+    public void crearReclamo(@RequestBody ReclamoDTO reclamoDTO) {
         Reclamo reclamo = new Reclamo();
         reclamo.setDescripcion(reclamoDTO.getDescripcion());
 
@@ -47,7 +48,7 @@ public class ReclamoControlador {
         Sitio sitio = sitioRepository.findByNumeroAndCalle(sitioDTO.getNumero(), sitioDTO.getCalle())
                 .orElseThrow(() -> new RuntimeException("Sitio no encontrado"));
         reclamo.setSitio(sitio);
-
+        
 
         DesperfectoDTO desperfectoDTO = reclamoDTO.getIddesperfecto();
         Desperfecto desperfecto = desperfectoService.obtenerOcrearDesperfecto(desperfectoDTO.getDescripcion());
@@ -60,17 +61,29 @@ public class ReclamoControlador {
         reclamoService.crearReclamo(reclamo);
     }
 
-    @GetMapping("/listar")
+    @GetMapping("")
     public List<Reclamo> listarReclamos() {
         return reclamoService.getReclamos();
     }
 
-    @GetMapping("/buscar/{documento}")
-    public List<Reclamo> buscarReclamoPorDocumento(@PathVariable String documento) {
-        return reclamoService.buscarReclamoPorDoc(documento);
+    @GetMapping("/{idReclamo}")
+    public Optional<Reclamo> obtenerReclamoPorId(@PathVariable Integer idReclamo) {
+        return reclamoService.getReclamoById(idReclamo);
     }
 
+    @GetMapping("/pendientes")
+    public List<Reclamo> listarReclamosPendientes() {
+        return reclamoService.getReclamosByEstado(EstadoEnum.PENDIENTE.getEstado());
+    }
 
+    @GetMapping("/finalizados")
+    public List<Reclamo> listarReclamosFinalizados() {
+        return reclamoService.getReclamosByEstado(EstadoEnum.FINALIZADO.getEstado());
+    }
 
+    @GetMapping("/documento/{documento}")
+    public List<Reclamo> buscarReclamoPorDocumento(@PathVariable String documento) {
+        return reclamoService.getReclamosByDocumento(documento);
+    }
 
 }
