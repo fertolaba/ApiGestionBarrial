@@ -30,4 +30,18 @@ public class AuthControlador {
         userService.crearUsuario(user);
 
     }
+
+    @PutMapping("/actualizar/{documento}")
+    public void actualizarPass(@PathVariable String documento, @RequestBody User user) {
+        // Verificar si el correo electrónico está asociado al documento proporcionado
+        boolean emailDocumentoMatch = userService.verificarEmailDocumento(documento, user.getMail());
+
+        if (emailDocumentoMatch) {
+            // Si coincide, actualizar la contraseña
+            userService.actualizarPassword(user.getMail(), user.getPassword());
+        } else {
+            // Si no coinciden, lanzar una excepción indicando que la cuenta no existe
+            throw new RuntimeException("El correo electrónico no está asociado al documento proporcionado. Cuenta no existe.");
+        }
+    }
 }
