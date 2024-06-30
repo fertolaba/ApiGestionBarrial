@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface VecinoRepository extends JpaRepository<Vecino, Integer> {
 
     public Optional<Vecino> findByDocumento(String documento);
-
+    boolean existsByDocumento(String documento);
 
 
 }

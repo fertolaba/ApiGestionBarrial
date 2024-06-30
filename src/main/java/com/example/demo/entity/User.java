@@ -14,6 +14,7 @@ public class User {
     private String apellido;
     private String mail;
 
+
     public User() {
     }
 
@@ -24,6 +25,7 @@ public class User {
         this.nombre = nombre;
         this.apellido = apellido;
         this.mail = mail;
+
     }
 
     public String getMail() {
@@ -42,13 +44,16 @@ public class User {
         this.documento = documento;
     }
 
-    public String getPassword() {  return password; }
+    public String getPassword() {
+        return password;
+    }
 
-     public void setPassword(String password) { this.password = password; }
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getNombre() {
-        return this.nombre;
+        return nombre;
     }
 
     public void setNombre(String nombre) {
@@ -56,7 +61,7 @@ public class User {
     }
 
     public String getApellido() {
-        return this.apellido;
+        return apellido;
     }
 
     public void setApellido(String apellido) {
@@ -70,5 +75,6 @@ public class User {
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
-}
 
+
+}
