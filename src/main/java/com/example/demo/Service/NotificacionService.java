@@ -3,6 +3,7 @@ package com.example.demo.Service;
 import com.example.demo.Repository.NotificacionRepository;
 import com.example.demo.entity.Notificacion;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,10 @@ public class NotificacionService {
 
     @Autowired
     private NotificacionRepository notificacionRepository;
+
+    public NotificacionService(NotificacionRepository notificacionRepository) {
+        this.notificacionRepository = notificacionRepository;
+    }
 
     public List<Notificacion> getAllNotificaciones() {
         return notificacionRepository.findAll();
@@ -41,5 +46,9 @@ public class NotificacionService {
     public void deleteNotificacion(int id) {
         Notificacion notificacion = notificacionRepository.findById(id).orElseThrow(() -> new RuntimeException("Notificación no encontrada"));
         notificacionRepository.delete(notificacion);
+    }
+
+    public List<Notificacion> getNotificacionesByDocumento(String documento) {
+        return notificacionRepository.findByDocumento(documento);
     }
 }
