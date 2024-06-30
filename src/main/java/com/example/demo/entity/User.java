@@ -13,19 +13,22 @@ public class User {
     private String nombre;
     private String apellido;
     private String mail;
+    private String rubro;
+    private int legajo;
 
 
     public User() {
     }
 
-    public User(String documento, String password, String tipoUsuario, String nombre, String apellido, String mail) {
+    public User(String documento, String password, String tipoUsuario, String nombre, String apellido, String mail, String rubro, int legajo) {
         this.documento = documento;
         this.password = password;
-        this.tipoUsuario = tipoUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.tipoUsuario = tipoUsuario;
         this.mail = mail;
-
+        this.rubro = rubro;
+        this.legajo = legajo;
     }
 
     public String getMail() {
@@ -77,4 +80,19 @@ public class User {
     }
 
 
+    public String getRubro() {
+        return rubro;
+    }
+
+    public void setRubro(String rubro) {
+        this.rubro = rubro;
+    }
+
+    public int getLegajo() {
+        return legajo;
+    }
+
+    public void setLegajo(int legajo) {
+        this.legajo = legajo;
+    }
 }

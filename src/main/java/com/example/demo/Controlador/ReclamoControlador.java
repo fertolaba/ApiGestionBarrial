@@ -72,8 +72,8 @@ public class ReclamoControlador {
         MovimientoReclamo movimientoReclamoCreado = null;
 
         try {
-            Vecino vecino = vecinoRepository.findByDocumento(reclamoDTO.getDocumento())
-                    .orElseThrow(() -> new ReclamoException("Vecino no encontrado"));
+            Vecino vecino = null;
+            Personal personal = null;
 
             Sitio sitio = sitioRepository.findById(reclamoDTO.getIdsitio())
                     .orElseThrow(() -> new ReclamoException("Sitio no encontrado"));
@@ -106,13 +106,15 @@ public class ReclamoControlador {
                 desperfecto = desperfectoRepository.save(nuevoDesperfecto);
             }
 
-
             var legajo = reclamoDTO.getLegajo();
-            Personal personal = null;
-            if (legajo != 0) {
+            if (legajo == 0) { // si es personal no es vecino y viceersa
+                vecino = vecinoRepository.findByDocumento(reclamoDTO.getDocumento())
+                        .orElseThrow(() -> new ReclamoException("Vecino no encontrado"));
+            } else {
                 personal = personalRepository.findById(legajo)
                         .orElseThrow(() -> new ReclamoException("Personal no encontrado"));
             }
+
 
             reclamo.setDescripcion(reclamoDTO.getDescripcion());
             reclamo.setVecino(vecino);
@@ -130,7 +132,7 @@ public class ReclamoControlador {
                 movimientoReclamo.setReclamo(reclamoGuardado);
                 movimientoReclamo.setCausa("creado");
                 movimientoReclamo.setFecha(LocalDateTime.now());
-                movimientoReclamo.setResponsable(vecino.getDocumento());
+                movimientoReclamo.setResponsable("reclamos origen " + (legajo == 0 ? "vecinos" : "inspectores"));
 
                 movimientoReclamoRepository.save(movimientoReclamo);
             }
