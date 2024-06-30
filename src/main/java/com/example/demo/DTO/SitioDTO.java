@@ -1,27 +1,17 @@
 package com.example.demo.DTO;
 
 public class SitioDTO {
-    private String calle;
-    private int numero;
+    private Integer idSitio;
 
-    public SitioDTO(String calle, int numero) {
-        this.calle = calle;
-        this.numero = numero;
+    public SitioDTO(Integer idSitio) {
+        this.idSitio = idSitio;
     }
 
-    public String getCalle() {
-        return calle;
+    public int getIdSitio() {
+        return idSitio;
     }
 
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setIdSitio(int idSitio) {
+        this.idSitio = idSitio;
     }
 }

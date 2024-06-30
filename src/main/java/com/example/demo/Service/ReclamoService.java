@@ -37,6 +37,6 @@ public class ReclamoService {
     }
 
     public List<Reclamo> getReclamosByDocumento(String documento) {
-        return reclamoRepository.findByDocumento(documento);
+        return reclamoRepository.findByVecinoDocumento(documento);
     }
 }

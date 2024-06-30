@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ReclamoRepository extends JpaRepository<Reclamo, Integer> {
 
-    List<Reclamo> findByDocumento(String documento);
+    List<Reclamo> findByVecinoDocumento(String documento);
     List<Reclamo> findByEstado(String estado);
 }

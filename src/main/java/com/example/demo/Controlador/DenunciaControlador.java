@@ -28,7 +28,7 @@ public class DenunciaControlador {
     @Autowired
     private SitioRepository sitioRepository;
 
-    @PostMapping("/crear") //nose xq me toma aceptarepsonsabilidad como 0 cuando creas una denuncia
+    @PostMapping("/") //nose xq me toma aceptarepsonsabilidad como 0 cuando creas una denuncia
     public void crearDenuncia(@RequestBody DenunciaDTO denunciaDTO){
         Denuncia denuncias = new Denuncia();
         Vecino vecino = vecinoRepository.findByDocumento(denunciaDTO.getDocumento())
@@ -36,7 +36,7 @@ public class DenunciaControlador {
         denuncias.setVecino(vecino);
 
         SitioDTO sitioDTO = denunciaDTO.getSitio();
-        Sitio sitio = sitioRepository.findByNumeroAndCalle(sitioDTO.getNumero(), sitioDTO.getCalle())
+        Sitio sitio = sitioRepository.findById(sitioDTO.getIdSitio())
                 .orElseThrow(() -> new RuntimeException("Sitio no encontrado"));
         denuncias.setSitio(sitio);
 
