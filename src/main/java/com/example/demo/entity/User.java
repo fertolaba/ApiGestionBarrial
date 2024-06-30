@@ -3,24 +3,35 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "usuarios")
 public class User {
     @Id
     @Column(length = 40)
     private String documento;
-    //private String password;
+    private String password;
     private String tipoUsuario;
     private String nombre;
     private String apellido;
+    private String mail;
 
     public User() {
     }
 
-    public User(String documento /*, String password*/, String tipoUsuario, String nombre, String apellido) {
+    public User(String documento, String password, String tipoUsuario, String nombre, String apellido, String mail) {
         this.documento = documento;
-        //this.password = password;
+        this.password = password;
         this.tipoUsuario = tipoUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.mail = mail;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getDocumento() {
@@ -31,9 +42,9 @@ public class User {
         this.documento = documento;
     }
 
-    //public String getPassword() {  return password; }
+    public String getPassword() {  return password; }
 
-    // public void setPassword(String password) { this.password = password; }
+     public void setPassword(String password) { this.password = password; }
 
 
     public String getNombre() {

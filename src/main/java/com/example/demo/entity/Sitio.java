@@ -23,16 +23,16 @@ public class Sitio {
     private String entrecalleB;
     private String descripcion;
     private String acargode;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm",timezone = "America/Argentina/Buenos_Aires")
-    private String apertura;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm",  timezone = "America/Argentina/Buenos_Aires")
-    private String cierre;
+
+    private Date apertura;
+
+    private Date cierre;
     private String comentarios;
     private String documento;
 
     public Sitio() {}
 
-    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, String apertura, String cierre, String comentarios, String documento) {
+    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, Date apertura, Date cierre, String comentarios, String documento) {
         this.idsitio = idsitio;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -120,19 +120,19 @@ public class Sitio {
         this.acargode = cargoDelSitio;
     }
 
-    public String getApertura() {
+    public Date getApertura() {
         return apertura;
     }
 
-    public void setApertura(String apertura) {
+    public void setApertura(Date apertura) {
         this.apertura = apertura;
     }
 
-    public String getCierre() {
+    public Date getCierre() {
         return cierre;
     }
 
-    public void setCierre(String cierre) {
+    public void setCierre(Date cierre) {
         this.cierre = cierre;
     }
 
