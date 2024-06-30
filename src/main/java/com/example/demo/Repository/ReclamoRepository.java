@@ -14,6 +14,8 @@ public interface ReclamoRepository extends JpaRepository<Reclamo, Integer> {
 
     List<Reclamo> findByVecinoDocumento(String documento);
 
+    List<Reclamo> findByPersonalLegajo(int legajo);
+
     List<Reclamo> findByEstado(String estado);
 
     List<Reclamo> findByDesperfectoAndSitio(Desperfecto desperfecto, Sitio sitio);

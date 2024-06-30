@@ -43,6 +43,10 @@ public class ReclamoService {
         return reclamoRepository.findByVecinoDocumento(documento);
     }
 
+    public List<Reclamo> getReclamosByLegajo(int legajo) {
+        return reclamoRepository.findByPersonalLegajo(legajo);
+    }
+
     public List<Reclamo> getReclamosByDesperfectoAndSitio(Desperfecto desperfecto, Sitio sitio) {
         return reclamoRepository.findByDesperfectoAndSitio(desperfecto, sitio);
     }

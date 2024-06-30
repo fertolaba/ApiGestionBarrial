@@ -184,4 +184,9 @@ public class ReclamoControlador {
         return reclamoService.getReclamosByDocumento(documento);
     }
 
+    @GetMapping("/legajo/{legajo}")
+    public List<Reclamo> buscarReclamoPorLegajo(@PathVariable int legajo) {
+        return reclamoService.getReclamosByLegajo(legajo);
+    }
+
 }
