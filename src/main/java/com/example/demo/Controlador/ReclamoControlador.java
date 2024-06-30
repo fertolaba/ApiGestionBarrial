@@ -2,17 +2,19 @@ package com.example.demo.Controlador;
 
 import com.example.demo.DTO.DesperfectoDTO;
 import com.example.demo.DTO.ReclamoDTO;
-import com.example.demo.DTO.SitioDTO;
 import com.example.demo.Repository.*;
 import com.example.demo.Service.DesperfectoService;
 import com.example.demo.Service.ReclamoService;
 import com.example.demo.entity.*;
 import com.example.demo.enums.EstadoEnum;
+import com.example.demo.exceptions.ReclamoException;
+import org.hibernate.grammars.hql.HqlParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/api/reclamos")
@@ -35,35 +37,124 @@ public class ReclamoControlador {
     @Autowired
     private PersonalRepository personalRepository;
 
-    @PostMapping("") // crea un reclamo ingresando el legajo y documento, tambien te pide un
-    // desperfecto q seria del vecino , si es un inspector te pide un rubro
-    public void crearReclamo(@RequestBody ReclamoDTO reclamoDTO) {
-        Reclamo reclamo = new Reclamo();
-        reclamo.setDescripcion(reclamoDTO.getDescripcion());
+    @Autowired
+    private NotificacionRepository notificacionRepository;
 
-        Vecino vecino = vecinoRepository.findByDocumento(reclamoDTO.getDocumento())
-                .orElseThrow(() -> new RuntimeException("Vecino no encontrado"));
-        reclamo.setVecino(vecino);
+    private void auxiliarGuardarReclamosUnificados(Reclamo reclamo, List<Reclamo> otrosReclamos) {
+        Reclamo reclamoUnificadoOriginal = !otrosReclamos.isEmpty() ? otrosReclamos.get(0).getReclamoUnificado() : null;
 
-        Sitio sitio = sitioRepository.findById(reclamoDTO.getIdsitio())
-                .orElseThrow(() -> new RuntimeException("Sitio no encontrado"));
-        reclamo.setSitio(sitio);
-
-
-        DesperfectoDTO desperfectoDTO = reclamoDTO.getIddesperfecto();
-        Desperfecto desperfecto = desperfectoService.obtenerOcrearDesperfecto(desperfectoDTO.getDescripcion());
-        reclamo.setDesperfecto(desperfecto);
-
-        var legajo = reclamoDTO.getLegajo();
-        if (legajo != 0) {
-            Personal personal = personalRepository.findById(legajo)
-                    .orElseThrow(() -> new RuntimeException("Personal no encontrado"));
-            reclamo.setPersonal(personal);
+        if (reclamoUnificadoOriginal != null) {
+            reclamo.setReclamoUnificado(reclamoUnificadoOriginal);
+        } else {
+            reclamo.setReclamoUnificado(reclamo);
         }
 
-        reclamo.setEstado(EstadoEnum.PENDIENTE.getEstado());
+        Desperfecto desperfecto = reclamo.getDesperfecto();
+        for (Reclamo reclamoMismoDesperfecto : otrosReclamos) {
+            if (reclamoUnificadoOriginal != null) {
+                reclamoMismoDesperfecto.setReclamoUnificado(reclamoUnificadoOriginal);
+            } else {
+                reclamoMismoDesperfecto.setReclamoUnificado(reclamo);
+            }
+            reclamoMismoDesperfecto.setDesperfecto(desperfecto);
+        }
 
-        reclamoService.crearReclamo(reclamo);
+        reclamoRepository.saveAll(otrosReclamos);
+    }
+
+
+    @PostMapping("") // crea un reclamo ingresando el legajo y documento, tambien te pide un
+    // desperfecto q seria del vecino , si es un inspector te pide un rubro
+    public ResponseEntity<Reclamo> crearReclamo(@RequestBody ReclamoDTO reclamoDTO) {
+        Reclamo reclamo = new Reclamo();
+        Reclamo reclamoGuardado = null;
+        Notificacion notificacionGuardada = null;
+        MovimientoReclamo movimientoReclamoCreado = null;
+
+        try {
+            Vecino vecino = vecinoRepository.findByDocumento(reclamoDTO.getDocumento())
+                    .orElseThrow(() -> new ReclamoException("Vecino no encontrado"));
+
+            Sitio sitio = sitioRepository.findById(reclamoDTO.getIdsitio())
+                    .orElseThrow(() -> new ReclamoException("Sitio no encontrado"));
+
+
+            // TODO: cambiar nombre al del servicio obtenerOcrearDesperfecto, ya no lo crea
+            DesperfectoDTO desperfectoDTO = reclamoDTO.getIddesperfecto();
+
+            Desperfecto desperfectoExistente = desperfectoService.obtenerOcrearDesperfecto(desperfectoDTO.getDescripcion());
+            Desperfecto desperfecto = null;
+            Reclamo reclamoUnificado = null;
+            List<Reclamo> otrosReclamosMismoDesperfectoSitio = new ArrayList<Reclamo>();
+
+            if (desperfectoExistente != null) {
+                // Obtener reclamos por desperfecto y sitio
+                otrosReclamosMismoDesperfectoSitio = reclamoService.getReclamosByDesperfectoAndSitio(desperfectoExistente, sitio);
+                desperfecto = desperfectoExistente;
+
+                for (Reclamo reclamoMismoDesperfectoSitio : otrosReclamosMismoDesperfectoSitio) {
+                    if (reclamoMismoDesperfectoSitio.getReclamoUnificado() != null) {
+                        reclamoUnificado = reclamoMismoDesperfectoSitio.getReclamoUnificado();
+                        reclamoUnificado.setDesperfecto(reclamoMismoDesperfectoSitio.getDesperfecto());
+                        break; // No es necesario seguir buscando
+                    }
+                }
+            } else {
+                // Crear un nuevo desperfecto si no existe
+                var nuevoDesperfecto = new Desperfecto();
+                nuevoDesperfecto.setDescripcion(desperfectoDTO.getDescripcion());
+                desperfecto = desperfectoRepository.save(nuevoDesperfecto);
+            }
+
+
+            var legajo = reclamoDTO.getLegajo();
+            Personal personal = null;
+            if (legajo != 0) {
+                personal = personalRepository.findById(legajo)
+                        .orElseThrow(() -> new ReclamoException("Personal no encontrado"));
+            }
+
+            reclamo.setDescripcion(reclamoDTO.getDescripcion());
+            reclamo.setVecino(vecino);
+            reclamo.setSitio(sitio);
+            reclamo.setDesperfecto(desperfecto);
+            reclamo.setEstado(EstadoEnum.PENDIENTE.getEstado());
+            reclamo.setPersonal(personal);
+
+            reclamoGuardado = reclamoService.crearReclamo(reclamo);
+            auxiliarGuardarReclamosUnificados(reclamoGuardado, otrosReclamosMismoDesperfectoSitio);
+
+            if (reclamoGuardado != null && reclamoGuardado.getIdreclamo() != null) {
+                MovimientoReclamo movimientoReclamo = new MovimientoReclamo();
+
+                movimientoReclamo.setReclamo(reclamoGuardado);
+                movimientoReclamo.setCausa("creado");
+                movimientoReclamo.setFecha(LocalDateTime.now());
+                movimientoReclamo.setResponsable(vecino.getDocumento());
+
+                movimientoReclamoRepository.save(movimientoReclamo);
+            }
+
+            if (reclamoGuardado != null && reclamoGuardado.getIdreclamo() != null) {
+                Notificacion notificacionUsuario = notificacionUsuario = new Notificacion();
+                notificacionUsuario.setFecha(new Date());
+                notificacionUsuario.setVecino(vecino);
+                notificacionUsuario.setMensaje("Su reclamo fue creado con el numero " + reclamoGuardado.getIdreclamo());
+                notificacionUsuario.setReclamo(reclamoGuardado);
+
+                notificacionGuardada = notificacionRepository.save(notificacionUsuario);
+            }
+
+        } catch (ReclamoException exception) {
+            // Estaria bueno enviar con mensajes desde aca pero...
+            return ResponseEntity.status(400).body(null);
+        } // si hubiera otro podrian ponderse mas excepciones aca y enviar cosas diferentes pero bueno, usemos codigo http en el front
+
+
+        if (notificacionGuardada == null || notificacionGuardada.getIdnotificacion() == null) { // si se notifico, todo salio bien, creo
+            return ResponseEntity.status(500).body(null);
+        }
+        return ResponseEntity.status(201).body(reclamo);
     }
 
     @GetMapping("")

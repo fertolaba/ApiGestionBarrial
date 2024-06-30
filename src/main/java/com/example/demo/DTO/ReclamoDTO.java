@@ -5,6 +5,7 @@ public class ReclamoDTO {
     private Integer idsitio;
     private String descripcion;
     private DesperfectoDTO iddesperfecto;
+    private int idReclamoUnificado;
     private int legajo;
 
     public String getDocumento() {
@@ -47,5 +48,13 @@ public class ReclamoDTO {
 
     public void setLegajo(int legajo) {
         this.legajo = legajo;
+    }
+
+    public int getIdReclamoUnificado() {
+        return idReclamoUnificado;
+    }
+
+    public void setIdReclamoUnificado(int idReclamoUnificado) {
+        this.idReclamoUnificado = idReclamoUnificado;
     }
 }

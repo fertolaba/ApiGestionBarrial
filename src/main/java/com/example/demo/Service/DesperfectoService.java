@@ -19,15 +19,11 @@ public class DesperfectoService {
 
     public Desperfecto obtenerOcrearDesperfecto(String descripcion) {
         if (descripcion == null || descripcion.trim().isEmpty()) {
-            throw new IllegalArgumentException("Descripcion vacia");
+            throw new IllegalArgumentException("Debe especificar una descripcion");
         }
 
-        Optional<Desperfecto> desperfectoOptional = desperfectoRepository.findByDescripcion(descripcion);
-        return desperfectoOptional.orElseGet(() -> {
-            Desperfecto nuevoDesperfecto = new Desperfecto();
-            nuevoDesperfecto.setDescripcion(descripcion);
-            return desperfectoRepository.save(nuevoDesperfecto);
-        });
+        return desperfectoRepository.findByDescripcion(descripcion);
+
     }
 
 }

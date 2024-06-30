@@ -1,8 +1,12 @@
 package com.example.demo.Service;
 
 import com.example.demo.Repository.ReclamoRepository;
+import com.example.demo.entity.Desperfecto;
 import com.example.demo.entity.Reclamo;
+import com.example.demo.entity.Sitio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +22,9 @@ public class ReclamoService {
         this.reclamoRepository = reclamoRepository;
     }
 
-    public void crearReclamo(Reclamo reclamo) {
+    public Reclamo crearReclamo(Reclamo reclamo) {
 
-
-        reclamoRepository.save(reclamo);
+        return reclamoRepository.save(reclamo);
     }
 
     public Optional<Reclamo> getReclamoById(Integer idReclamo) {
@@ -38,5 +41,9 @@ public class ReclamoService {
 
     public List<Reclamo> getReclamosByDocumento(String documento) {
         return reclamoRepository.findByVecinoDocumento(documento);
+    }
+
+    public List<Reclamo> getReclamosByDesperfectoAndSitio(Desperfecto desperfecto, Sitio sitio) {
+        return reclamoRepository.findByDesperfectoAndSitio(desperfecto, sitio);
     }
 }
