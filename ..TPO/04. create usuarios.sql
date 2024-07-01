@@ -18,9 +18,15 @@ REFERENCES vecinos(documento);
 ALTER TABLE usuarios
 ADD mail VARCHAR(50) NOT NULL DEFAULT 'gestionbarrial@yopmail.com';
 
+UPDATE usuarios
+SET mail = CONCAT(documento, '@yopmail.com')
+
 ALTER TABLE usuarios
 ADD expira_contrasena DATE NOT NULL DEFAULT (DATEADD(DAY, -1, GETDATE())); -- default 1 dia antes de la fecha actual
 
 /*
 	SELECT * FROM usuarios
+
+	SELECT TOP(10)* from vecinos
 */
+

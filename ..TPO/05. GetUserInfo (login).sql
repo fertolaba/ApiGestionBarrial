@@ -51,7 +51,8 @@ BEGIN
                 p.apellido,
                 @tipousuario AS tipousuario,
                 r.descripcion AS rubro,
-				p.legajo
+				p.legajo,
+                DATEADD(DAY, 360, GETDATE()) AS expiraContrasena
             FROM personal p
 				JOIN legajoRubro lr ON lr.legajo = p.legajo
 				JOIN rubros r ON lr.idRubro = r.idRubro
