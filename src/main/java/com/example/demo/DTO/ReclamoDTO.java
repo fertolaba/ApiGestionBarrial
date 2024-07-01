@@ -1,6 +1,7 @@
 package com.example.demo.DTO;
 
 public class ReclamoDTO {
+    private int idreclamo;
     private String documento;
     private Integer idsitio;
     private String descripcion;
@@ -56,5 +57,13 @@ public class ReclamoDTO {
 
     public void setIdReclamoUnificado(int idReclamoUnificado) {
         this.idReclamoUnificado = idReclamoUnificado;
+    }
+
+    public int getIdreclamo() {
+        return idreclamo;
+    }
+
+    public void setIdreclamo(int idreclamo) {
+        this.idreclamo = idreclamo;
     }
 }

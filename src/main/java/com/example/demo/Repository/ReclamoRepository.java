@@ -19,4 +19,6 @@ public interface ReclamoRepository extends JpaRepository<Reclamo, Integer> {
     List<Reclamo> findByEstado(String estado);
 
     List<Reclamo> findByDesperfectoAndSitio(Desperfecto desperfecto, Sitio sitio);
+
+    List<Reclamo> findByReclamoUnificado(Reclamo reclamoUnificado);
 }
