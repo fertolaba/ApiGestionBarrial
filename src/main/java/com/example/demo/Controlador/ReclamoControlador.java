@@ -226,7 +226,7 @@ public class ReclamoControlador {
                     var notificacionUsuario = new Notificacion();
                     notificacionUsuario.setFecha(new Date());
                     notificacionUsuario.setVecino(reclamo.getVecino());
-                    notificacionUsuario.setMensaje("Su reclamo fue con el numero " + reclamo.getIdreclamo() + " fue " + estado.getEstado());
+                    notificacionUsuario.setMensaje("Su reclamo con el numero fue " + reclamo.getIdreclamo() + " fue " + estado.getEstado());
                     notificacionUsuario.setReclamo(reclamoActualizado);
 
                     notificacionUsuarioActualizado = notificacionRepository.save(notificacionUsuario);
