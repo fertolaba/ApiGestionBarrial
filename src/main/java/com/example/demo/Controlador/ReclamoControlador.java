@@ -1,5 +1,6 @@
 package com.example.demo.Controlador;
 
+import com.example.demo.DTO.ActualizarEstadoReclamoDTO;
 import com.example.demo.DTO.DesperfectoDTO;
 import com.example.demo.DTO.ReclamoDTO;
 import com.example.demo.Repository.*;
@@ -62,7 +63,6 @@ public class ReclamoControlador {
         reclamoRepository.saveAll(otrosReclamos);
     }
 
-
     @PostMapping("") // crea un reclamo ingresando el legajo y documento, tambien te pide un
     // desperfecto q seria del vecino , si es un inspector te pide un rubro
     public ResponseEntity<Reclamo> crearReclamo(@RequestBody ReclamoDTO reclamoDTO) {
@@ -78,18 +78,19 @@ public class ReclamoControlador {
             Sitio sitio = sitioRepository.findById(reclamoDTO.getIdsitio())
                     .orElseThrow(() -> new ReclamoException("Sitio no encontrado"));
 
-
             // TODO: cambiar nombre al del servicio obtenerOcrearDesperfecto, ya no lo crea
             DesperfectoDTO desperfectoDTO = reclamoDTO.getIddesperfecto();
 
-            Desperfecto desperfectoExistente = desperfectoService.obtenerOcrearDesperfecto(desperfectoDTO.getDescripcion());
+            Desperfecto desperfectoExistente = desperfectoService
+                    .obtenerOcrearDesperfecto(desperfectoDTO.getDescripcion());
             Desperfecto desperfecto = null;
             Reclamo reclamoUnificado = null;
             List<Reclamo> otrosReclamosMismoDesperfectoSitio = new ArrayList<Reclamo>();
 
             if (desperfectoExistente != null) {
                 // Obtener reclamos por desperfecto y sitio
-                otrosReclamosMismoDesperfectoSitio = reclamoService.getReclamosByDesperfectoAndSitio(desperfectoExistente, sitio);
+                otrosReclamosMismoDesperfectoSitio = reclamoService
+                        .getReclamosByDesperfectoAndSitio(desperfectoExistente, sitio);
                 desperfecto = desperfectoExistente;
 
                 for (Reclamo reclamoMismoDesperfectoSitio : otrosReclamosMismoDesperfectoSitio) {
@@ -114,7 +115,6 @@ public class ReclamoControlador {
                 personal = personalRepository.findById(legajo)
                         .orElseThrow(() -> new ReclamoException("Personal no encontrado"));
             }
-
 
             reclamo.setDescripcion(reclamoDTO.getDescripcion());
             reclamo.setVecino(vecino);
@@ -150,10 +150,11 @@ public class ReclamoControlador {
         } catch (ReclamoException exception) {
             // Estaria bueno enviar con mensajes desde aca pero...
             return ResponseEntity.status(400).body(null);
-        } // si hubiera otro podrian ponderse mas excepciones aca y enviar cosas diferentes pero bueno, usemos codigo http en el front
+        } // si hubiera otro podrian ponderse mas excepciones aca y enviar cosas
+          // diferentes pero bueno, usemos codigo http en el front
 
-
-        if (notificacionGuardada == null || notificacionGuardada.getIdnotificacion() == null) { // si se notifico, todo salio bien, creo
+        if (notificacionGuardada == null || notificacionGuardada.getIdnotificacion() == null) { // si se notifico, todo
+                                                                                                // salio bien, creo
             return ResponseEntity.status(500).body(null);
         }
         return ResponseEntity.status(201).body(reclamo);
@@ -189,4 +190,66 @@ public class ReclamoControlador {
         return reclamoService.getReclamosByLegajo(legajo);
     }
 
+    @PostMapping("/actualizarEstado")
+    public ResponseEntity<Reclamo> actualizarEstado(@RequestBody ActualizarEstadoReclamoDTO reclamoDTO) {
+        Reclamo reclamo = reclamoDTO.getReclamo();
+        EstadoEnum estado = reclamoDTO.getEstado();
+        Reclamo reclamoActualizado = null;
+        MovimientoReclamo movimientoReclamoActualizado = null;
+        Notificacion notificacionUsuarioActualizado = null;
+        Personal personal = null;
+
+        try {
+            // obtengo personal por legajo
+            personal = personalRepository.findById(reclamoDTO.getLegajo())
+                    .orElseThrow(() -> new ReclamoException("Personal no encontrado"));
+
+            if (estado == EstadoEnum.ANULADO || estado == EstadoEnum.FINALIZADO) {
+                reclamo.setEstado(estado.getEstado());
+
+                reclamoActualizado = reclamoRepository.save(reclamo);
+
+                if (reclamoActualizado != null) {
+                    MovimientoReclamo movimientoReclamo = new MovimientoReclamo();
+                    String causa = "Actualizado a " + estado.getEstado() + " por el inspector " + personal.getNombre();
+
+                    movimientoReclamo.setReclamo(reclamoActualizado);
+                    movimientoReclamo.setCausa(causa);
+                    movimientoReclamo.setFecha(LocalDateTime.now());
+                    movimientoReclamo
+                            .setResponsable("inspector " + personal.getNombre() + " - legajo " + personal.getLegajo());
+
+                    movimientoReclamoActualizado = movimientoReclamoRepository.save(movimientoReclamo);
+                }
+
+                if (movimientoReclamoActualizado != null && movimientoReclamoActualizado.getIdMovimiento() != null) {
+                    var notificacionUsuario = new Notificacion();
+                    notificacionUsuario.setFecha(new Date());
+                    notificacionUsuario.setVecino(reclamo.getVecino());
+                    notificacionUsuario.setMensaje("Su reclamo fue con el numero " + reclamo.getIdreclamo() + " fue " + estado.getEstado());
+                    notificacionUsuario.setReclamo(reclamoActualizado);
+
+                    notificacionUsuarioActualizado = notificacionRepository.save(notificacionUsuario);
+                }
+
+                if (notificacionUsuarioActualizado != null
+                        && notificacionUsuarioActualizado.getIdnotificacion() != null) {
+                    return ResponseEntity.status(200).body(reclamoActualizado);
+                }
+
+                return ResponseEntity.status(500).body(null);
+
+            } else {
+                // Manejo de error si el estado no es válido
+                throw new IllegalArgumentException("Estado no válido");
+            }
+        } catch (Exception exception) {
+        }
+
+        if (reclamoActualizado != null && reclamoActualizado.getIdreclamo() != null) {
+            return ResponseEntity.status(200).body(reclamoActualizado);
+        }
+
+        return ResponseEntity.status(500).body(null);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.DTO.ActualizarEstadoReclamoDTO;
 import com.example.demo.Repository.ReclamoRepository;
 import com.example.demo.entity.Desperfecto;
 import com.example.demo.entity.Reclamo;
@@ -50,4 +51,14 @@ public class ReclamoService {
     public List<Reclamo> getReclamosByDesperfectoAndSitio(Desperfecto desperfecto, Sitio sitio) {
         return reclamoRepository.findByDesperfectoAndSitio(desperfecto, sitio);
     }
+
+    // todo puesto en el controller // XD
+    // public Optional<Reclamo> actualizarEstadoReclamo(ActualizarEstadoReclamoDTO actualizarEstadoReclamoDTO) {
+    //     Optional<Reclamo> reclamo = reclamoRepository.findById(actualizarEstadoReclamoDTO.getReclamo().getIdreclamo());
+    //     if (reclamo.isPresent()) {
+    //         reclamo.get().setEstado(estado);
+    //         reclamoRepository.save(reclamo.get());
+    //     }
+    //     return reclamo;
+    // }
 }
