@@ -2,7 +2,10 @@
     @documento VARCHAR(20),
     @password VARCHAR(40)
 AS
--- GetUserInfo DNI123123, 123
+/*
+
+	EXEC GetUserInfo @documento=DNI123123, @password=123
+*/
 BEGIN
     DECLARE @tipousuario VARCHAR(20) = 'N/A';
 
@@ -23,11 +26,13 @@ BEGIN
     BEGIN
         IF @tipousuario = 'vecino'
         BEGIN
+			-- DECLARE  @tipousuario varchar(50) = 'test'
             SELECT
                 v.documento,
                 --u.password, -- Se comenta para no mostrar la contraseña en el resultado
                 v.nombre,
                 v.apellido,
+				u.mail,
                 @tipousuario AS tipousuario
             FROM
                 vecinos v
@@ -37,14 +42,18 @@ BEGIN
         END
         ELSE
         BEGIN
+			-- DECLARE  @tipousuario varchar(50) = 'test'
             SELECT
                 p.documento,
                 --u.password, -- Se comenta para no mostrar la contraseña en el resultado
                 p.nombre,
                 p.apellido,
                 @tipousuario AS tipousuario,
-                p.rubro
+                r.descripcion AS rubro,
+				p.legajo
             FROM personal p
+				JOIN legajoRubro lr ON lr.legajo = p.legajo
+				JOIN rubros r ON lr.idRubro = r.idRubro
             WHERE
                 p.documento = @documento AND p.password = @password;
         END
@@ -52,4 +61,3 @@ BEGIN
 END;
 
 
-SELECT * FROM personal

@@ -15,7 +15,7 @@ ADD CONSTRAINT FK_usuarios_vecinos_por_documento FOREIGN KEY (documento)
 REFERENCES vecinos(documento);
 
 ALTER TABLE usuarios
-ADD email VARCHAR(50) NOT NULL DEFAULT 'gestionbarrial@yopmail.com';
+ADD mail VARCHAR(50) NOT NULL DEFAULT 'gestionbarrial@yopmail.com';
 
 -- ...
 SELECT top(5)* FROM personal
