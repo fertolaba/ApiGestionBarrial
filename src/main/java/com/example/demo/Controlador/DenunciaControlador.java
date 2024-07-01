@@ -1,7 +1,9 @@
 package com.example.demo.Controlador;
 
 import com.example.demo.DTO.DenunciaDTO;
+import com.example.demo.DTO.DenunciaRequest;
 import com.example.demo.DTO.SitioDTO;
+import com.example.demo.DTO.SitioRequest;
 import com.example.demo.Repository.DenunciaRepository;
 import com.example.demo.Repository.SitioRepository;
 import com.example.demo.Repository.VecinoRepository;
@@ -29,19 +31,19 @@ public class DenunciaControlador {
     private SitioRepository sitioRepository;
 
     @PostMapping("/") //nose xq me toma aceptarepsonsabilidad como 0 cuando creas una denuncia
-    public void crearDenuncia(@RequestBody DenunciaDTO denunciaDTO){
+    public void crearDenuncia(@RequestBody DenunciaRequest denunciaRequest){
         Denuncia denuncias = new Denuncia();
-        Vecino vecino = vecinoRepository.findByDocumento(denunciaDTO.getDocumento())
+        Vecino vecino = vecinoRepository.findByDocumento(denunciaRequest.getDocumento())
                 .orElseThrow(() -> new RuntimeException("Vecino no encontrado"));
         denuncias.setVecino(vecino);
 
-        SitioDTO sitioDTO = denunciaDTO.getSitio();
-        Sitio sitio = sitioRepository.findById(sitioDTO.getIdSitio())
+        SitioRequest sitioRequest = denunciaRequest.getSitio();
+        Sitio sitio = sitioRepository.findByNumeroAndCalle(sitioRequest.getNumero(), sitioRequest.getCalle())
                 .orElseThrow(() -> new RuntimeException("Sitio no encontrado"));
         denuncias.setSitio(sitio);
 
-        denuncias.setDescripcion(denunciaDTO.getDescripcion());
-        denuncias.setAceptaResponsabilidad(denunciaDTO.getAceptaresponsabilidad());
+        denuncias.setDescripcion(denunciaRequest.getDescripcion());
+        denuncias.setAceptaResponsabilidad(denunciaRequest.getAceptaresponsabilidad());
 
         denunciaService.crearDenuncia(denuncias);
     }
