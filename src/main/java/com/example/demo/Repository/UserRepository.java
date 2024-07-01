@@ -12,8 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Procedure(procedureName = "GetUserInfo")
-
+    Optional<User> findByDocumento(String documento);
     Optional<User> findByMail(String mail);
     Optional<User> findByMailAndDocumento(String mail, String documento);
 

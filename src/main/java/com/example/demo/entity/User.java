@@ -10,16 +10,20 @@ public class User {
     @Id
     @Column(length = 40)
     private String documento;
+
     private String password;
     private String mail;
-
     private Date expiraContrasena;
+
+    @Transient
+    private String passwordAntiguo;
 
     public User() {
     }
 
-    public User(String documento, String password, String mail, Date expiraContrasena) {
+    public User(String documento, String passwordAntiguo, String password, String mail, Date expiraContrasena) {
         this.documento = documento;
+        this.passwordAntiguo = passwordAntiguo;
         this.password = password;
         this.mail = mail;
         this.expiraContrasena = expiraContrasena;
@@ -55,5 +59,13 @@ public class User {
 
     public void setExpiraContrasena(Date expiraContrasena) {
         this.expiraContrasena = expiraContrasena;
+    }
+
+    public String getPasswordAntiguo() {
+        return passwordAntiguo;
+    }
+
+    public void setPasswordAntiguo(String passwordAntiguo) {
+        this.passwordAntiguo = passwordAntiguo;
     }
 }

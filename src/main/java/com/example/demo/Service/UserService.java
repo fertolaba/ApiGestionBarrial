@@ -45,13 +45,17 @@ public class UserService {
         mailService.sendEmail(user.getMail(), subject, message);
     }
 
-    public void actualizarPassword(String mail, String password) {
+    public User actualizarPassword(String mail, String password) {
         User userFound = userRepository.findByMail(mail)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con mail: " + mail));
 
         userFound.setPassword(password);
         // Actualiza la contraseña);
-        userRepository.save(userFound);
+        var updatedUser = userRepository.save(userFound);
+
+        mailService.sendEmail(userFound.getMail(), "Su contraseña en tpgestionbarrio ha cambiado", "Si no fuiste vos, cambiala desde la app o contactate con el municipio");
+
+        return updatedUser;
     }
 
     public boolean verificarEmailDocumento(String documento, String mail) {
