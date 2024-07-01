@@ -6,6 +6,8 @@ import org.antlr.v4.runtime.misc.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -24,15 +26,16 @@ public class Sitio {
     private String descripcion;
     private String acargode;
 
-    private Date apertura;
+    private LocalTime apertura;
+    private LocalTime cierre;
 
-    private Date cierre;
     private String comentarios;
     private String documento;
 
-    public Sitio() {}
+    public Sitio() {
+    }
 
-    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, Date apertura, Date cierre, String comentarios, String documento) {
+    public Sitio(Integer idsitio, double latitud, double longitud, String calle, int numero, String entrecalleA, String entrecalleB, String descripcion, String acargode, LocalTime apertura, LocalTime cierre, String comentarios, String documento) {
         this.idsitio = idsitio;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -120,19 +123,19 @@ public class Sitio {
         this.acargode = cargoDelSitio;
     }
 
-    public Date getApertura() {
+    public LocalTime getApertura() {
         return apertura;
     }
 
-    public void setApertura(Date apertura) {
+    public void setApertura(LocalTime apertura) {
         this.apertura = apertura;
     }
 
-    public Date getCierre() {
+    public LocalTime getCierre() {
         return cierre;
     }
 
-    public void setCierre(Date cierre) {
+    public void setCierre(LocalTime cierre) {
         this.cierre = cierre;
     }
 
