@@ -1,7 +1,6 @@
 package com.example.demo.Service;
 
-import com.example.demo.Repository.UserRepository;
-import com.example.demo.entity.User;
+import com.example.demo.entity.UserViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,20 +10,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-
-    @Autowired
-    private final UserRepository userRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public AuthService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthService() {
     }
 
-
-    public User getUserInfo(String documento, String password) {
+    public UserViewModel getUserInfo(String documento, String password) { // login
         return jdbcTemplate.queryForObject(
                 "EXEC GetUserInfo ?, ?", new Object[] { documento, password },
-                new BeanPropertyRowMapper<>(User.class));
+                new BeanPropertyRowMapper<>(UserViewModel.class));
     }
 }

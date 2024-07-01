@@ -1,11 +1,13 @@
 package com.example.demo.Controlador;
 
 
+import com.example.demo.DTO.AltaUsuarioVecinoRequest;
 import com.example.demo.Service.AuthService;
 import com.example.demo.Service.MailService;
 import com.example.demo.Service.UserService;
 import com.example.demo.entity.LoginRequest;
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +23,17 @@ public class AuthControlador {
     private MailService mailService;
 
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest loginRequest) {
+    public UserViewModel login(@RequestBody LoginRequest loginRequest) {
         return authService.getUserInfo(loginRequest.getDocumento(), loginRequest.getPassword());
     }
     @PostMapping("/alta")
     public void altaUsuario(@RequestBody User user) {
-
         userService.crearUsuario(user);
+    }
 
+    @PostMapping("/nuevo")
+    public void nuevoUsuarioConEnvioEmail(@RequestBody AltaUsuarioVecinoRequest altaUsuarioVecinoRequest) {
+        userService.procesarSolicitud(altaUsuarioVecinoRequest);
     }
 
     @PutMapping("/actualizar/{documento}")
@@ -40,7 +45,6 @@ public class AuthControlador {
             // Si coincide, actualizar la contraseña
             userService.actualizarPassword(user.getMail(), user.getPassword());
         } else {
-            // Si no coinciden, lanzar una excepción indicando que la cuenta no existe
             throw new RuntimeException("El correo electrónico no está asociado al documento proporcionado. Cuenta no existe.");
         }
     }

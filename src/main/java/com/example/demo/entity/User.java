@@ -2,6 +2,8 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "usuarios")
 public class User {
@@ -9,26 +11,18 @@ public class User {
     @Column(length = 40)
     private String documento;
     private String password;
-    private String tipoUsuario;
-    private String nombre;
-    private String apellido;
     private String mail;
-    private String rubro;
-    private int legajo;
 
+    private Date expiraContrasena;
 
     public User() {
     }
 
-    public User(String documento, String password, String tipoUsuario, String nombre, String apellido, String mail, String rubro, int legajo) {
+    public User(String documento, String password, String mail, Date expiraContrasena) {
         this.documento = documento;
         this.password = password;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.tipoUsuario = tipoUsuario;
         this.mail = mail;
-        this.rubro = rubro;
-        this.legajo = legajo;
+        this.expiraContrasena = expiraContrasena;
     }
 
     public String getMail() {
@@ -55,44 +49,11 @@ public class User {
         this.password = password;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Date getExpiraContrasena() {
+        return expiraContrasena;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-
-    public String getRubro() {
-        return rubro;
-    }
-
-    public void setRubro(String rubro) {
-        this.rubro = rubro;
-    }
-
-    public int getLegajo() {
-        return legajo;
-    }
-
-    public void setLegajo(int legajo) {
-        this.legajo = legajo;
+    public void setExpiraContrasena(Date expiraContrasena) {
+        this.expiraContrasena = expiraContrasena;
     }
 }
