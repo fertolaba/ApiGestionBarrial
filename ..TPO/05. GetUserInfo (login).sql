@@ -52,10 +52,10 @@ BEGIN
                 @tipousuario AS tipousuario,
                 r.descripcion AS rubro,
 				p.legajo,
-                DATEADD(DAY, 360, GETDATE()) AS expiraContrasena
+				DATEADD(DAY, 360, GETDATE()) AS expiraContrasena
             FROM personal p
-				JOIN legajoRubro lr ON lr.legajo = p.legajo
-				JOIN rubros r ON lr.idRubro = r.idRubro
+				LEFT JOIN legajoRubro lr ON lr.legajo = p.legajo
+				LEFT JOIN rubros r ON lr.idRubro = r.idRubro
             WHERE
                 p.documento = @documento AND p.password = @password;
         END
@@ -63,3 +63,5 @@ BEGIN
 END;
 
 
+
+SELECT * FROM personal
