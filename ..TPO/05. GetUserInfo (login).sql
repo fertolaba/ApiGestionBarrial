@@ -33,7 +33,8 @@ BEGIN
                 v.nombre,
                 v.apellido,
 				u.mail,
-                @tipousuario AS tipousuario
+                @tipousuario AS tipousuario,
+				u.expira_contrasena AS expiraContrasena
             FROM
                 vecinos v
 					JOIN usuarios u ON v.documento = u.documento

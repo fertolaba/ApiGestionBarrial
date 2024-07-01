@@ -5,9 +5,10 @@ CREATE TABLE usuarios (
     CONSTRAINT FK_Usuarios_Vecinos_porDocumento FOREIGN KEY (documento) REFERENCES vecinos(documento)
 );
 
-INSERT INTO usuarios (documento, Password)
-VALUES ('DNI28000046', '123')
-
+--  10 registros en la tabla usuarios desde la tabla vecinos
+INSERT INTO usuarios (documento, password, expiraContrasena)
+SELECT TOP 10 documento, 'password', DATEADD(DAY, -1, GETDATE())
+FROM vecinos;
 
 -- Relacionando vecinos con usuarios
 ALTER TABLE usuarios
@@ -17,5 +18,9 @@ REFERENCES vecinos(documento);
 ALTER TABLE usuarios
 ADD mail VARCHAR(50) NOT NULL DEFAULT 'gestionbarrial@yopmail.com';
 
--- ...
-SELECT top(5)* FROM personal
+ALTER TABLE usuarios
+ADD expira_contrasena DATE NOT NULL DEFAULT (DATEADD(DAY, -1, GETDATE())); -- default 1 dia antes de la fecha actual
+
+/*
+	SELECT * FROM usuarios
+*/
